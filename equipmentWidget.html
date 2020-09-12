@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Equipment Visualizer by spoonacular</title>
+    <meta name="author" content="David Urbansky">
+    <meta name="description" content="A spoonacular equipment visualizer demo for recipes.">
+    <meta name="keywords" content="spoonacular, API, equipment, visualization, demo, app">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://spoonacular.com/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://spoonacular.com/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div id="app">
+        <h1>spoonacular Equipment Visualizer</h1>
+
+        <p>Create an informative and attractive equipment list for your recipe. This tool allows your readers to quickly
+            see the used equipment and images. You can pick between the grid and list view.</p>
+
+        <h3>Instructions</h3>
+        <textarea v-model="instructions" name="ingredients" style="height:150px;width:calc(100% - 20px);padding:10px"
+            placeholder="one ingredient per line, such as &quot;200 grams of cucumber&quot;"></textarea>
+
+        <h3>View Style</h3>
+        <div>
+            <input id="spoonacular-grid" name="view" type="radio" checked="" value="grid" v-model="viewStyle">
+            <label for="spoonacular-grid" onclick="">grid</label>
+            <input id="spoonacular-list" name="view" type="radio" value="list" v-model="viewStyle">
+            <label for="spoonacular-list" onclick="">list</label>
+            <span class="slide-button"></span>
+        </div>
+
+        <div class="button" @click="previewEquipmentWidget">Preview Equipment Visualizer</div>
+
+        <iframe id="previewWidget"></iframe>
+
+        <!-- shameless plug -->
+        <div id="spoonacular">
+            powered by<br>
+            <a href="https://spoonacular.com/food-api">
+                <img src="https://spoonacular.com/application/frontend/images/logo-simple-framed-green-gradient.svg"
+                    alt="spoonacular logo"><br>
+                spoonacular API
+            </a>
+        </div>
+        </template>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            mounted() {
+            },
+            data: function () {
+                return {
+                    spoonacularApiKey: '871cc9ddc1ea4733830dd2c30e3d691a', // REPLACE THIS DEMO KEY, get a free key here: https://spoonacular.com/food-api
+                    viewStyle: 'grid',
+                    instructions: 'Preheat oven. Cut cucumber with a knife and put in a blender',
+                };
+            },
+            methods: {
+                previewEquipmentWidget() {
+                    var postContent = this.instructions;
+
+                    let self = this;
+                    var xmlHttp = new XMLHttpRequest();
+                    xmlHttp.onreadystatechange = function () {
+                        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                            self.previewWidgetCallback(xmlHttp.responseText);
+                        }
+                    }
+                    xmlHttp.open("POST", 'https://api.spoonacular.com/recipes/visualizeEquipment?apiKey=' + this.spoonacularApiKey, true);
+                    xmlHttp.send('defaultCss=true&view=' + this.viewStyle + '&instructions=' + postContent);
+                },
+
+                previewWidgetCallback(response) {
+                    var iframeDocument = document.getElementById('previewWidget').contentDocument;
+                    iframeDocument.open();
+                    iframeDocument.write(response);
+                    iframeDocument.close();
+
+                    var el = document.createElement("script");
+                    el.setAttribute("type", "text/javascript");
+                    el.setAttribute("src", "https://code.jquery.com/jquery-1.9.1.min.js");
+                    document.getElementById('previewWidget').contentDocument.head.appendChild(el);
+
+                    // wait until jquery is loaded
+                    setTimeout(function () {
+                        var el = document.createElement("script");
+                        el.setAttribute("type", "text/javascript");
+                        el.setAttribute("src", "https://spoonacular.com/application/frontend/js/equipmentWidget.min.js?c=1");
+                        document.getElementById('previewWidget').contentDocument.body.appendChild(el);
+                    }, 1000);
+                },
+            },
+        });
+    </script>
+
+    <style>
+        body {
+            background-color: rgb(241, 255, 241);
+        }
+
+        #app {
+            font-family: 'Indie Flower', cursive;
+            background-color: #fff;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
+            border-radius: 22px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+            margin-top: 20px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 22px;
+            display: inline;
+        }
+
+        .button:hover {
+            background-color: rgb(241, 255, 241);
+        }
+
+        .button {
+            padding: 5px 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #spoonacular {
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</body>
+
+</html>
