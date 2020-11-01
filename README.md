@@ -13,6 +13,12 @@ The spoonacular price visualizer widget lets you show the total estimated cost f
 
 ![spoonacular price breakdown visualizer widget](img/price-widget.png)
 
+## Taste Widget
+The spoonacular taste visualizer widget lets you display the taste distribution of an ingredient or an entire recipe. Currently, the tastes sweet, salty, sour, bitter, savory (umami), and fatty are supported. Check out the file [tasteWidget.html](tasteWidget.html) for a demo.
+
+![spoonacular nutrition visualizer widget](img/taste-widget.png)
+
+
 
 ## Nutrition Widget
 The spoonacular nutrition visualizer widget lets you display macro and micro nutrients of a recipe. By hovering over the bars you can even see which ingredients contribute most to the nutrient. Check out the file [nutritionWidget.html](nutritionWidget.html) for a demo.

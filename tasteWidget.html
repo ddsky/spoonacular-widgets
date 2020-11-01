@@ -10,9 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="https://spoonacular.com/favicon.ico" type="image/x-icon">
     <link rel="icon" href="https://spoonacular.com/favicon.ico" type="image/x-icon">
-
-    <!-- <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
-    <!-- <script src="https://www.chartjs.org/dist/2.9.4/Chart.min.js"></script> -->
 </head>
 
 <body>
@@ -23,7 +20,7 @@
 
         <h3>Ingredients</h3>
         <textarea v-model="ingredients" name="ingredients" style="height:150px;width:calc(100% - 20px);padding:10px"
-            placeholder="one ingredient per line, such as &quot;200 grams of cucumber&quot;"></textarea>
+            placeholder="one ingredient per line, such as &quot;200 grams of sugar&quot;"></textarea>
 
         <div class="button" @click="previewTasteWidget">Preview Taste Visualizer</div>
 
@@ -40,145 +37,6 @@
         </div>
         </template>
     </div>
-
-    <!-- <div id="chartContainer" style="height: 370px; width: 100%;"></div>
-    <script>
-        window.onload = function () {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "light2",
-                height: 200,
-                axisY: {
-                    interval: 20,
-                    suffix: "%"
-                },
-                toolTip: {
-                    shared: false
-                },
-                legend: {
-                    fontSize: 20
-                },
-                data: [{
-                    type: "stackedBar100",
-                    toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-                    showInLegend: true,
-                    name: "Sweet",
-                    color: "#ef476f",
-                    dataPoints: [
-                        { y: 600, label: " " },
-                    ]
-                },
-                {
-                    type: "stackedBar100",
-                    toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-                    showInLegend: true,
-                    name: "Salty",
-                    color: "#ffd166",
-                    dataPoints: [
-                        { y: 400, label: "" },
-                    ]
-                },
-                {
-                    type: "stackedBar100",
-                    toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-                    showInLegend: true,
-                    name: "Sour",
-                    color: "#06d6a0",
-                    dataPoints: [
-                        { y: 400, label: "" },
-                    ]
-                },
-                {
-                    type: "stackedBar100",
-                    toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-                    showInLegend: true,
-                    name: "Bitter",
-                    color: "#118ab2",
-                    dataPoints: [
-                        { y: 300, label: "" },
-                    ]
-                },
-                {
-                    type: "stackedBar100",
-                    toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-                    showInLegend: true,
-                    name: "Savory",
-                    color: "#073b4c",
-                    dataPoints: [
-                        { y: 400, label: "" },
-                    ]
-                },
-                {
-                    type: "stackedBar100",
-                    toolTipContent: "<b>{name}:</b> {y} (#percent%)",
-                    showInLegend: true,
-                    name: "Fatty",
-                    color: "#6061AD",
-                    dataPoints: [
-                        { y: 100, label: "" },
-                    ]
-                },
-
-                ]
-            });
-            chart.render();
-
-        }
-    </script> -->
-
-    <!-- <div style="width:700px">
-		<canvas id="canvas"></canvas>
-    </div>
-    <script>
-		var config = {
-			type: 'radar',
-			data: {
-				labels: ['Sweet', 'Salty', 'Sour', 'Bitter', 'Savory', 'Fatty'],
-				datasets: [{
-					label: '',
-					backgroundColor: 'rgb(75, 192, 192, 0.2)',
-					borderColor: 'rgb(75, 192, 192)',
-					pointBackgroundColor: 'rgb(75, 192, 192)',
-					data: [
-						20,
-						50,
-						87,
-						23,
-						5,
-						40
-					]
-				}]
-			},
-			options: {
-				legend: {
-                    display: false,
-				},
-				title: {
-					display: false,
-				},
-				scale: {
-                    pointLabels: {
-                        fontSize: 20,
-                    },
-                    angleLines: {
-                        display: true
-                    },
-					ticks: {
-                        display: false,
-                        min: 0,
-                        max: 100,
-                        stepSize: 20
-					}
-				}
-			}
-		};
-
-		window.onload = function() {
-			window.myRadar = new Chart(document.getElementById('canvas'), config);
-		};
-    </script> -->
-    
 
     <script>
         var app = new Vue({
@@ -202,17 +60,11 @@
                             self.previewWidgetCallback(xmlHttp.responseText);
                         }
                     }
-                    xmlHttp.open("POST", 'http://localhost:8080/recipes/visualizeTaste?apiKey=' + this.spoonacularApiKey, true);
-                    // xmlHttp.open("POST", 'https://api.spoonacular.com/recipes/visualizePriceEstimator?apiKey=' + this.spoonacularApiKey, true);
+                    xmlHttp.open("POST", 'https://api.spoonacular.com/recipes/visualizeTaste?apiKey=' + this.spoonacularApiKey, true);
                     xmlHttp.send('ingredientList=' + postContent);
                 },
 
                 previewWidgetCallback(response) {
-                    var el = document.createElement("script");
-                    el.setAttribute("type", "text/javascript");
-                    el.setAttribute("src", "https://code.jquery.com/jquery-1.9.1.min.js");
-                    document.getElementById('previewWidget').contentDocument.head.appendChild(el);
-
                     el = document.createElement("script");
                     el.setAttribute("type", "text/javascript");
                     el.setAttribute("src", "https://www.chartjs.org/dist/2.9.4/Chart.min.js");
@@ -220,11 +72,6 @@
 
                     // wait until jquery is loaded
                     setTimeout(function () {
-                        var el = document.createElement("script");
-                        el.setAttribute("type", "text/javascript");
-                        el.setAttribute("src", "https://spoonacular.com/application/frontend/js/ingredientWidget.min.js?c=1");
-                        document.getElementById('previewWidget').contentDocument.body.appendChild(el);
-
                         var iframeDocument = document.getElementById('previewWidget').contentDocument;
                         iframeDocument.open();
                         iframeDocument.write(response);
