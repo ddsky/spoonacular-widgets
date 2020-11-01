@@ -75,7 +75,6 @@
                             self.previewWidgetCallback(xmlHttp.responseText);
                         }
                     }
-                    // xmlHttp.open("POST", 'http://localhost:8080/recipes/visualizePriceEstimator?apiKey=' + this.spoonacularApiKey, true);
                     xmlHttp.open("POST", 'https://api.spoonacular.com/recipes/visualizePriceEstimator?apiKey=' + this.spoonacularApiKey, true);
                     xmlHttp.send('defaultCss=true&servings=' + this.servings + '&mode=' + this.viewStyle + '&ingredientList=' + postContent);
                 },
